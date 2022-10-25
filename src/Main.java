@@ -18,8 +18,7 @@ public class Main {
 //        ('Andorra','Europe', 28748, 2831741),
 //        ('Angola','Europe', 28748, 2831741);
 //
-//        select * from World where area > 300000  and population > 25000000;
-//        select max(area), name, continent from World group by name, continent;
+//        select name, continent from World where area > 300000  and population > 25000000;
 //
 //        create table Person(
 //                id int,
@@ -34,8 +33,14 @@ public class Main {
 //        (3, 'a@b.com'),
 //        (4, 'c@d.com'),
 //        (5, 'd@b.com');
-//
-//        select email from Person group by email;
+//        -- 1 version
+//        select email from Person group by email having count(email) > 1;
+//        -- 2 version
+//        select distinct p1.email from person as p1 where
+//        (select count(*) from person as p2 where p2.email = p1.email) > 1;
+//        -- 3 version
+//        select email from (select email, count(email) as num
+//                from person group by email) as static where num > 1;
 //
 //        create table people (
 //                id INT,
@@ -79,12 +84,32 @@ public class Main {
 //
 //        select id, first_name, gender, birth_date from people where birth_date
 //        between '1999-01-01' and '2008-12-31' order by birth_date desc;
+//
 //        select count(*) from people where birth_date between '1999-01-01' and '2008-12-31';
-//        select count(gender) as female from people where gender = 'Female';
-//        select count(gender) as male from people where gender = 'Male';
-//        select * from people where first_name like 'A%';
-//        alter table person add constraint person_ung unique(id);
-//        alter table people rename column birth_date to birth;
-
+//
+//        select count(gender) from people group by gender order by gender desc;
+//
+//        select * from people where first_name like 'A%' or first_name like '%i';
+//
+//        select count(*) from people where first_name like 'A%' or first_name like '%i';
+//
+//        select country, count(*) from people where first_name like 'A%' or first_name like '%i' group by country;
+//
+//        select distinct country from people;
+//
+//        select first_name ,salary from people order by salary desc limit 10;
+//
+//        select first_name ,salary from people order by salary desc limit 5 offset 5;
+//
+//        select count(*), gender, country from people where salary > (select avg(salary) from people) group by gender, country;
+//
+//        select round(avg(salary),2) from people;
+//
+//        select count(*) from people group by country;
+//
+//        select min(salary), country from people group by country;
+//
+//        select first_name, country, salary from people as p1 where salary = (select min(p2.salary) from people as p2
+//        where p2.country = p1.country and p2.salary > 50000);
     }
 }
